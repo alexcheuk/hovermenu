@@ -4,21 +4,45 @@
 		initY:0,
 		currentQuad: null,
 		init: function(opt) {
-			hovermenu.menu = $('#hovermenu');
-			// hovermenu.menu = $('<div id="hovermenu">');
+			
+			$('body').append(hovermenu.menu = _.createMenu());
 
-			// $('body').append(hovermenu.menu);
+			if(opt.buttons){
+				hovermenu.setButtons(opt.buttons);
+			}
 
 			$(document).on('mousedown', function(event){
 				_.openMenu(event);
-				// return (event.button == 1);
 			}).on('mouseup', function(event){
 				_.closeMenu(event);
 			});
 		},
+
+		setButtons: function(buttonsObj){
+			for(var i in buttonsObj){
+				hovermenu.menu
+					.children(_.strFormat('.{{pos}}',{pos:i})).children('.hm-text')
+					.html(_.strFormat('<i class="{{icon}}"></i><span>{{text}}</span>', {icon:buttonsObj[i].icon, text:buttonsObj[i].text}));
+			}
+		}
 	}
 
 	var _ = {
+
+		createMenu: function(){
+			var menu = $('<div id="hovermenu" class="initial">');
+			var btnHtmlStr = "";
+			var btnInnerHtml = '<div class="hm-pie"></div><div class="hm-text"></div>';
+			var t = "tb", left = "rl";
+			for(var tb in t){
+				for(var lr in left){
+					btnHtmlStr+='<div class="hm-btn '+t[tb]+left[lr]+'">'+btnInnerHtml+'</div>';
+				}
+			}
+			menu.append(btnHtmlStr);
+			return menu;
+		},
+
 		openMenu: function(event){
 			hovermenu.initX = event.clientX;
 			hovermenu.initY = event.clientY;
@@ -70,6 +94,14 @@
 				hovermenu.menu.children('.hm-btn').removeClass('active');
 				hovermenu.currentQuad = null;
 			}
+		},
+
+		strFormat: function(str, objVar){
+			for(var i in objVar){
+				var re = new RegExp("{{\\s*"+i+"\\s*}}","g");
+				str = str.replace(re, objVar[i]);
+			}
+			return str;
 		}
 	}
 
@@ -87,5 +119,12 @@
 })(jQuery);
 
 $(function(){
-	$.hovermenu('init');
+	$.hovermenu('init',{
+		buttons:{
+			"tl":{icon:"icon-thumbs-up", text:"LIKE"},
+			"tr":{icon:"icon-share-alt", text:"SHARE"},
+			"bl":{icon:"icon-home", text:"HOME"},
+			"br":{icon:"icon-github", text:"FORK"}
+		}
+	});
 })
