@@ -3,11 +3,14 @@
 		initX:0,
 		initY:0,
 		currentQuad: null,
+
 		init: function(opt) {
 			
 			$('body').append(hovermenu.menu = _.createMenu());
 
-			if(opt.buttons){
+			hovermenu.options = opt;
+
+			if(hovermenu.options.buttons){
 				hovermenu.setButtons(opt.buttons);
 			}
 
@@ -68,6 +71,13 @@
 		},
 
 		closeMenu: function(){
+
+			var btnCallback = hovermenu.currentQuad;
+
+			if(hovermenu.options.buttons && hovermenu.options.buttons[btnCallback]){
+				if(hovermenu.options.buttons[btnCallback].callback)  hovermenu.options.buttons[btnCallback].callback();
+			}
+
 			hovermenu.menu.addClass('initial');
 			hovermenu.currentQuad = null;
 
@@ -77,6 +87,7 @@
 				hovermenu.menu.hide();
 				hovermenu.menu.children('.hm-btn').removeClass('active');
 			},200);
+
 		},
 
 		onDrag: function(event){
@@ -121,10 +132,14 @@
 $(function(){
 	$.hovermenu('init',{
 		buttons:{
-			"tl":{icon:"icon-thumbs-up", text:"LIKE"},
-			"tr":{icon:"icon-share-alt", text:"SHARE"},
-			"bl":{icon:"icon-home", text:"HOME"},
-			"br":{icon:"icon-github", text:"FORK"}
+			"tl":{icon:"icon-thumbs-up", text:"LIKE", callback: function(){showAction("LIKED !");}},
+			"tr":{icon:"icon-share-alt", text:"SHARE", callback: function(){showAction("SHARED !");}},
+			"bl":{icon:"icon-home", text:"HOME", callback: function(){window.location = "http://alexcheuk.com"; }},
+			"br":{icon:"icon-github", text:"FORK", callback: function(){window.open("https://github.com/alexcheuk/hovermenu","_blank");}}
 		}
 	});
+
+	function showAction(txt){
+		$('.action').stop().css("opacity","1").text(txt).show().fadeOut(3000);
+	}
 })

@@ -1,6 +1,6 @@
 body {
 	font-size: 11px;
-	background-color: #eee;
+	background-color: #e8e3dc;
 	font-family: 'PT Sans', sans-serif;
 }
 
@@ -17,9 +17,8 @@ body {
 
 .hm-btn {
 	width: 110px;
-	height: 110px; /*overflow: hidden;
-	*/
-position: absolute;
+	height: 110px; /*overflow: hidden;*/
+	position: absolute;
 	cursor: pointer;
 }
 
@@ -150,4 +149,23 @@ ANIMATIONS
 	font-size: 28px;
 	display: block;
 	margin-bottom: 4px;
+}
+
+.action{
+	font-family:"PT Sans", Arial;
+	font-size:60px;
+	font-weight: bold;
+	color:rgba(0,0,0,0.2);
+	position:absolute;
+	top:50%;
+	bottom:50%;
+	left:0;
+	right:0;
+	margin-top:-30px;
+	text-align:center;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
