@@ -140,6 +140,6 @@ $(function(){
 	});
 
 	function showAction(txt){
-		$('.action').stop().css("opacity","1").text(txt).show().fadeOut(3000);
+		$('.action').stop().css("opacity","1").text(txt).show().fadeOut(3000, function(){ $(this).text("CLICK ANY WHERE ON THE PAGE!").css("opacity","1").show(); });
 	}
 })
