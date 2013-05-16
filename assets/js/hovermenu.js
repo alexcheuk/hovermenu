@@ -14,9 +14,20 @@
 				hovermenu.setButtons(opt.buttons);
 			}
 
-			$(document).on('mousedown', function(event){
-				_.openMenu(event);
-			}).on('mouseup', function(event){
+			// $(document).on('mousedown', function(event){
+			// 	_.openMenu(event);
+			// }).on('mouseup', function(event){
+			// 	_.closeMenu(event);
+			// });
+
+			$(document).on('mousemove', function(event){
+				hovermenu.currentMouseX = event.clientX;
+				hovermenu.currentMouseY = event.clientY;
+			});
+
+			$(document).on('keydown', function(event){
+				if(event.keyCode==17 && !hovermenu.isOpened) _.openMenu(event);
+			}).on('keyup', function(event){
 				_.closeMenu(event);
 			});
 		},
@@ -47,23 +58,23 @@
 		},
 
 		openMenu: function(event){
-			hovermenu.initX = event.clientX;
-			hovermenu.initY = event.clientY;
+			hovermenu.initX = hovermenu.currentMouseX;
+			hovermenu.initY = hovermenu.currentMouseY;
+
+			hovermenu.isOpened = true;
 
 			if(hovermenu.closeTimer){
 				clearTimeout(hovermenu.closeTimer);
 			}
 
 			hovermenu.menu.css({
-				'left' : (event.clientX-115)+'px',
-				'top' : (event.clientY-115)+'px'
+				'left' : (hovermenu.currentMouseX-115)+'px',
+				'top' : (hovermenu.currentMouseY-115)+'px'
 			});
 
 			hovermenu.menu.show();
 
-			$(document).on('mousemove', function(event){
-				_.onDrag(event);
-			});
+			$(document).on('mousemove', _.onDrag);
 
 			setTimeout(function(){
 				hovermenu.menu.removeClass('initial');
@@ -71,6 +82,7 @@
 		},
 
 		closeMenu: function(){
+			hovermenu.isOpened = false;
 
 			var btnCallback = hovermenu.currentQuad;
 
@@ -81,7 +93,7 @@
 			hovermenu.menu.addClass('initial');
 			hovermenu.currentQuad = null;
 
-			$(document).off('mousemove');
+			$(document).off('mousemove', _.onDrag);
 
 			hovermenu.closeTimer = setTimeout(function(){
 				hovermenu.menu.hide();
